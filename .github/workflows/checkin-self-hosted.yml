@@ -46,12 +46,9 @@ jobs:
         run: uv sync
 
       - name: Install Playwright browsers
-        run: uv run playwright install chromium
+        run: |
+          uv run playwright install chromium
+          uv run patchright install chromium
 
       - name: Check-in
-        run: |
-          for i in 1 2 3; do
-            uv run python ./message.py && exit 0
-            [ $i -lt 3 ] && echo "::warning::Attempt $i failed, retrying in 5s..." && sleep 5
-          done
-          exit 1
+        run: xvfb-run -a uv run python ./message.py
